@@ -46,18 +46,21 @@ else
 endif
 
 
+FUNC_OBJS           = common.o
+
 GENE_TESTER_OBJS	= gene_tester.o
 GENE_TESTER			= gene_tester.exe
 
-TESTERS			= $(GENE_TESTER)
+OBJS                = $(GENE_TESTER_OBJS) $(FUNC_OBJS)
+TESTERS			    = $(GENE_TESTER)
 
 SUPPORT64		= -DUSE_INT64 -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
 LIBS			= -lpthread -ldl -lm
 
 install: $(TESTERS)
 
-$(GENE_TESTER):$(GENE_TESTER_OBJS)
-	$(GXX) -o $(GENE_TESTER) $(GENE_TESTER_OBJS) $(LIBS)
+$(GENE_TESTER):$(OBJS)
+	$(GXX) -o $(GENE_TESTER) $(OBJS) $(LIBS)
 
 .c.o:
 	$(GCC) $(INCS) $(CFLAGS) -o $@ -c $<
@@ -67,7 +70,7 @@ $(GENE_TESTER):$(GENE_TESTER_OBJS)
 
 	
 clean:
-	$(RM) $(GENE_TESTER_OBJS)
+	$(RM) $(OBJS)
 	$(RM) $(TESTERS)
 	$(RM) *.wav
 

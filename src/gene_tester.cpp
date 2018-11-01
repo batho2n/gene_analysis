@@ -2,15 +2,18 @@
 #include <vector>
 #include <string>
 
+#include <string.h>
 
-typedef struct arg_t
+#include "common.h"
+
+typedef struct _arg_
 {
 	std::vector<std::string>	input_file;
 	std::string					type;
 	std::string					type_name;
 	std::vector<std::string>	write_name;
 	std::string					output_file;
-};
+} arg_t;
 
 
 void usage()
@@ -31,7 +34,7 @@ int get_opt(int argc, char **argv, arg_t *_argt)
 	{
 		if(strcmp(argv[argc], "--input") == 0)
 		{
-			_argt->input_file.push_back(argv[argc+1]);
+			if (split_string(argv[argc+1], "::", _argt->input_file) != 0)   goto usage;
 		}
 		else if(strcmp(argv[argc], "--type") == 0)
 		{
@@ -41,14 +44,20 @@ int get_opt(int argc, char **argv, arg_t *_argt)
 		{
 			_argt->output_file = argv[argc+1];
 		}
+        else if ( (strcmp(argv[argc], "-h") == 0) || (strcmp(argv[argc], "--help") == 0) )
+        {
+            goto usage;
+        }
 
 	}
+    std::cout<<"HERE"<<std::endl;
 	return 0;
 
 usage:
 	usage();
 	return -1;
 }
+
 int main (int argc, char *argv[])
 {
 	int err_code = 0;
@@ -57,7 +66,6 @@ int main (int argc, char *argv[])
 	if(err_code != 0)		return 0;
 
 
-	std::cout << "Input: " << _argt.input_file[0] << std::endl;
 	std::cout << "Type: " << _argt.type << std::endl;
 	std::cout << "Output: " << _argt.output_file << std::endl;
 
