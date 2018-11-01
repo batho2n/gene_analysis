@@ -10,6 +10,6 @@ clean:
 	rm -rf bin
 
 test:
-	./bin/gene_tester.exe -i data
+	./bin/gene_tester.exe --input data/list.txt --type intersect --output output.txt
 
 .PHONY: install clean test; 
